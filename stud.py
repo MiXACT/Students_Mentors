@@ -28,6 +28,15 @@ class Student:
 				n += 1
 		return round(average/n, 1)
 
+	def hw_course_avrg(self, students, course):
+		average = 0
+		n = 0
+		for i in students:
+			for j in i.grades[course]:
+				average += j
+				n += 1
+		return f'Средний бал за ДЗ по {course}: {round(average/n, 1)}'
+
 	def rate_lect(self, lecturer, course, grade):
 		if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
 			if course in lecturer.lect_grades:
@@ -70,6 +79,15 @@ class Lecturer(Mentor):
 				n += 1
 		return round(average/n, 1)
 
+	def course_avrg(self, lecturers, course):
+		average = 0
+		n = 0
+		for i in lecturers:
+			for j in i.lect_grades[course]:
+				average += j
+				n += 1
+		return f'Средняя оценка лекторов курса {course}: {round(average/n, 1)}'
+
 
 class Reviewer(Mentor):
 	def rate_hw(self, student, course, grade):
@@ -84,50 +102,63 @@ class Reviewer(Mentor):
 	def __str__(self):
 		return f'Имя: {self.name}\nФамилия: {self.surname}'
  
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python', 'Scotch try outs', 'Math']
-best_student_2 = Student('Rick', 'Mortynov', 'male')
-best_student_2.courses_in_progress += ['Math']
-best_student_2.add_courses('Python')
+student_1 = Student('Ruoy', 'Eman', 'your_gender')
+student_1.courses_in_progress += ['Python', 'Scotch try outs', 'Math']
+student_2 = Student('Rick', 'Mortynov', 'male')
+student_2.courses_in_progress += ['Math']
+student_2.add_courses('Python')
  
-cool_mentor = Reviewer('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python','Math']
+mentor_1 = Reviewer('Some', 'Buddy')
+mentor_1.courses_attached += ['Python','Math']
+mentor_2 = Reviewer('Boris', 'Britva')
+mentor_2.courses_attached += ['Scotch try outs', 'Math']
  
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 8)
+mentor_1.rate_hw(student_1, 'Python', 10)
+mentor_1.rate_hw(student_1, 'Python', 10)
+mentor_1.rate_hw(student_1, 'Python', 8)
 
-cool_mentor.rate_hw(best_student_2, 'Math', 3)
-cool_mentor.rate_hw(best_student_2, 'Math', 7)
-cool_mentor.rate_hw(best_student_2, 'Python', 9)
-cool_mentor.rate_hw(best_student_2, 'Python', 6)
+mentor_1.rate_hw(student_2, 'Math', 3)
+mentor_1.rate_hw(student_2, 'Math', 7)
+mentor_1.rate_hw(student_2, 'Python', 9)
+mentor_1.rate_hw(student_2, 'Python', 6)
+
+mentor_2.rate_hw(student_1, 'Scotch try outs', 9)
+mentor_2.rate_hw(student_1, 'Math', 7)
+mentor_2.rate_hw(student_1, 'Math', 10)
  
-print(best_student.grades)
+print(student_1.grades)
 
-best_lecturer_1 = Lecturer('John', 'Walker')
-best_lecturer_1.courses_attached += ['Scotch try outs']
-best_lecturer_2 = Lecturer('Masha', 'Ivanova')
-best_lecturer_2.courses_attached += ['Math']
+lecturer_1 = Lecturer('John', 'Walker')
+lecturer_1.courses_attached += ['Scotch try outs', 'Math']
+lecturer_2 = Lecturer('Masha', 'Ivanova')
+lecturer_2.courses_attached += ['Math']
 
-best_student.rate_lect(best_lecturer_1, 'Scotch try outs', 5)
-best_student.rate_lect(best_lecturer_2, 'Math', 8)
-best_student_2.rate_lect(best_lecturer_1, 'Scotch try outs', 10)
-best_student_2.rate_lect(best_lecturer_2, 'Math', 9)
+student_1.rate_lect(lecturer_1, 'Scotch try outs', 5)
+student_1.rate_lect(lecturer_1, 'Scotch try outs', 10)
+student_1.rate_lect(lecturer_2, 'Math', 8)
+student_2.rate_lect(lecturer_2, 'Math', 9)
+student_2.rate_lect(lecturer_1, 'Math', 4)
 
-print(f'{best_lecturer_1.lect_grades}\n{best_lecturer_2.lect_grades}')
+print(f'{lecturer_1.lect_grades}\n{lecturer_2.lect_grades}')
 
 #задача №3: перегрузка метода __str__ для "проверяющих" (Reviewer)
-print(cool_mentor)
+print(mentor_1)
 
 #задача №3: перегрузка метода __str__ для лекторов (Lecturer)
-print(best_lecturer_1)
-print(best_lecturer_2)
+print(lecturer_1)
+print(lecturer_2)
 
 #задача №3: перегрузка метода __str__ для студентов (Student)
-print(f'{best_student}\n{best_student_2}')
+print(f'{student_1}\n{student_2}')
 
 #задача №3: сравнение оценок лекторов
-print(best_lecturer_1 < best_lecturer_2)
+print(lecturer_1 < lecturer_2)
 
 #задача №3: сравнение оценок за ДЗ студентов
-print(best_student < best_student_2)
+print(student_1 < student_2)
+
+#задача №4: средняя оценка студентов за курс
+print(student_1.hw_course_avrg([student_1, student_2], 'Math'))
+
+#задача №4: средняя оценка лекторов за курс
+print(lecturer_1.course_avrg([lecturer_1, lecturer_2], 'Math'))
