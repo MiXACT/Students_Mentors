@@ -13,6 +13,12 @@ class Student:
 	def __str__(self):
 		return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.hw_avrg()}\nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}'
 
+	def __lt__(self, other):
+		if self.hw_avrg() < other.hw_avrg():
+			return f'{other.name} {other.surname} имеет больший средний бал.'
+		else:
+			return f'{self.name} {self.surname} имеет больший средний бал.'
+
 	def hw_avrg(self):
 		average = 0
 		n = 0
@@ -48,6 +54,12 @@ class Lecturer(Mentor):
 
 	def __str__(self):
 		return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average()}'
+
+	def __lt__(self, other):
+		if self.average() < other.average():
+			return f'{other.name} {other.surname} - лучший лектор.'
+		else:
+			return f'{self.name} {self.surname} - лучший лектор.'
 
 	def average(self):
 		average = 0
@@ -113,3 +125,9 @@ print(best_lecturer_2)
 
 #задача №3: перегрузка метода __str__ для студентов (Student)
 print(f'{best_student}\n{best_student_2}')
+
+#задача №3: сравнение оценок лекторов
+print(best_lecturer_1 < best_lecturer_2)
+
+#задача №3: сравнение оценок за ДЗ студентов
+print(best_student < best_student_2)
