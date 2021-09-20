@@ -20,6 +20,7 @@ class Student:
 			return f'{self.name} {self.surname} имеет больший средний бал.'
 
 	def hw_avrg(self):
+		'''Подсчёт средней оценки за ДЗ'''
 		average = 0
 		n = 0
 		for val in self.grades.values():
@@ -29,15 +30,21 @@ class Student:
 		return round(average/n, 1)
 
 	def hw_course_avrg(self, students, course):
+		'''Подсчёт средней оценки всех ДЗ по указанному курсу'''
 		average = 0
 		n = 0
 		for i in students:
-			for j in i.grades[course]:
-				average += j
-				n += 1
-		return f'Средний бал за ДЗ по {course}: {round(average/n, 1)}'
+			if course in i.grades:
+				for j in i.grades[course]:
+					average += j
+					n += 1
+		if n > 0:
+			return f'Средний бал за ДЗ по {course}: {round(average/n, 1)}'
+		else:
+			return 'ДЗ не проверено или указанного курса нет в программе.'
 
 	def rate_lect(self, lecturer, course, grade):
+		'''Оценивание лектора за курс'''
 		if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
 			if course in lecturer.lect_grades:
 				lecturer.lect_grades[course] += [grade]
@@ -71,6 +78,7 @@ class Lecturer(Mentor):
 			return f'{self.name} {self.surname} - лучший лектор.'
 
 	def average(self):
+		'''Подсчёт средней оценки лектора'''
 		average = 0
 		n = 0
 		for val in self.lect_grades.values():
@@ -80,17 +88,23 @@ class Lecturer(Mentor):
 		return round(average/n, 1)
 
 	def course_avrg(self, lecturers, course):
+		'''Подсчёт средней оценки всех лекторов за указанный курс'''
 		average = 0
 		n = 0
 		for i in lecturers:
-			for j in i.lect_grades[course]:
-				average += j
-				n += 1
-		return f'Средняя оценка лекторов курса {course}: {round(average/n, 1)}'
+			if course in i.lect_grades:
+				for j in i.lect_grades[course]:
+					average += j
+					n += 1
+		if n > 0:
+			return f'Средняя оценка лекторов курса {course}: {round(average/n, 1)}'
+		else:
+			return 'Работа лекторов не оценивалась или указанного курса нет в программе.'
 
 
 class Reviewer(Mentor):
 	def rate_hw(self, student, course, grade):
+		'''Оценивание ДЗ указанного студента по указанному курсу'''
 		if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
 			if course in student.grades:
 				student.grades[course] += [grade]
@@ -158,7 +172,7 @@ print(lecturer_1 < lecturer_2)
 print(student_1 < student_2)
 
 #задача №4: средняя оценка студентов за курс
-print(student_1.hw_course_avrg([student_1, student_2], 'Math'))
+print(student_1.hw_course_avrg([student_1, student_2], 'Python'))
 
 #задача №4: средняя оценка лекторов за курс
 print(lecturer_1.course_avrg([lecturer_1, lecturer_2], 'Math'))
